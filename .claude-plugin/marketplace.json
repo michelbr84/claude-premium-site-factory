@@ -1,0 +1,32 @@
+{
+  "name": "premium-site-tools",
+  "description": "Tools for building premium cinematic marketing websites with Claude Code — complete sites from empty folders with Next.js, Tailwind CSS, GSAP, QA, and localhost preview.",
+  "owner": {
+    "name": "Michel Duek",
+    "email": "166889728+michelbr84@users.noreply.github.com"
+  },
+  "plugins": [
+    {
+      "name": "premium-site-factory",
+      "source": "./plugins/premium-site-factory",
+      "description": "Build complete premium cinematic company websites from empty folders — Next.js, Tailwind CSS, GSAP, QA and build validation, secret scan, localhost preview, and an optional Replicate asset pipeline.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Michel Duek",
+        "email": "166889728+michelbr84@users.noreply.github.com"
+      },
+      "license": "MIT",
+      "homepage": "https://github.com/michelbr84/claude-premium-site-factory",
+      "category": "web-development",
+      "keywords": [
+        "website",
+        "nextjs",
+        "tailwind",
+        "gsap",
+        "landing-page",
+        "premium",
+        "marketing-site"
+      ]
+    }
+  ]
+}

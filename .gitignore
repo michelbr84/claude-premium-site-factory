@@ -1,0 +1,20 @@
+# Local working notes — not part of the published marketplace
+chat.md
+
+# Env files (this repo must never contain secrets; only templates/env.example ships)
+.env
+.env.*
+!.env.example
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Node (no packages should ever be installed here, but just in case)
+node_modules/
+
+# Local scratch
+.local/

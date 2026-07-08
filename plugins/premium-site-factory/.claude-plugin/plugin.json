@@ -1,0 +1,21 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "premium-site-factory",
+  "version": "1.0.0",
+  "description": "Create complete premium cinematic marketing websites from empty folders using Next.js, Tailwind CSS, GSAP, QA and build validation, a secret scan, localhost preview, and an optional Replicate asset pipeline.",
+  "author": {
+    "name": "Michel Duek",
+    "email": "166889728+michelbr84@users.noreply.github.com"
+  },
+  "homepage": "https://github.com/michelbr84/claude-premium-site-factory",
+  "repository": "https://github.com/michelbr84/claude-premium-site-factory",
+  "license": "MIT",
+  "keywords": [
+    "website",
+    "nextjs",
+    "tailwind",
+    "gsap",
+    "landing-page",
+    "premium"
+  ]
+}
