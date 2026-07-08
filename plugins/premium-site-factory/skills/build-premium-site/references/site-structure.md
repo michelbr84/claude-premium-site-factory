@@ -20,8 +20,12 @@ the structure is required, the labels are not.
 - Each service: name, one sharp sentence, optional detail line.
 
 ## 4. Signature visual section
-- The memorable centerpiece: an animated map, route, network, timeline, product exploded
-  view, city skyline, or abstract brand system — whatever fits the business.
+- The memorable centerpiece, grown from the visual thesis and the industry pattern
+  (see `industry-patterns.md`): an assembling product walkthrough, a floor plan drawing
+  itself, a process timeline, a schematic/trace animation, an ingredient map, an exploded
+  view, an abstract brand system — whatever THIS business earns.
+- Maps/routes only when geography is genuinely the product (delivery zones, service
+  areas, real estate) — never as a default centerpiece.
 - SVG + GSAP or lightweight canvas/3D. Must degrade gracefully (static composition) under
   reduced motion and on weak devices.
 

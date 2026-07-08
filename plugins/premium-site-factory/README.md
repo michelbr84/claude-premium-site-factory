@@ -4,11 +4,17 @@ Claude Code plugin with one skill, **`build-premium-site`**, that builds a compl
 premium cinematic marketing website from an empty folder in a single pass:
 
 - Next.js (App Router) + TypeScript + Tailwind CSS + GSAP/ScrollTrigger
+- A per-site **visual thesis** grown from built-in industry patterns (restaurant,
+  dental/medical, law, SaaS, architecture, fitness, semiconductor, local service,
+  luxury automotive, real estate) — no house style, no lookalike sites
 - Full landing page: cinematic hero, manifesto, services, signature visual section,
   story/process, showcase, trust layer, final CTA
-- QA: typecheck, build, secret scan, responsive + accessibility checklist
+- QA: typecheck, build, secret scan, responsive + accessibility checklist, and an
+  anti-clone pass (industry-appropriate palette, copy voice, CTA, signature section)
 - Background localhost dev server with the URL handed to you
-- Optional Replicate asset pipeline (server/script-side only, token stays in `.env.local`)
+- Three asset modes: `no-api` (designed SVG/CSS visuals), `prompts-only` (fallbacks +
+  finalized prompts + ready-to-run script), `generate-with-replicate` (small curated
+  set; token stays in `.env.local`, server/script-side only)
 
 ## Usage
 
@@ -35,7 +41,8 @@ on localhost.
 ```
 skills/build-premium-site/
   SKILL.md           # the skill entrypoint and workflow
-  references/        # quality bar, site structure, visual direction, assets, QA checklist
+  references/        # quality bar, site structure, visual direction, industry patterns,
+                     # asset modes, QA checklist (incl. anti-clone pass)
   templates/         # env.example, SITE_BRIEF, README, CLAUDE.md templates for generated sites
   scripts/           # start-localhost.sh, secret-scan.sh (copied into generated sites)
 ```

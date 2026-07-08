@@ -9,8 +9,8 @@
     {
       "name": "premium-site-factory",
       "source": "./plugins/premium-site-factory",
-      "description": "Build complete premium cinematic company websites from empty folders — Next.js, Tailwind CSS, GSAP, QA and build validation, secret scan, localhost preview, and an optional Replicate asset pipeline.",
-      "version": "1.0.0",
+      "description": "Build complete premium cinematic company websites from empty folders — Next.js, Tailwind CSS, GSAP, per-industry visual theses with an anti-clone QA pass, build validation, secret scan, localhost preview, and three asset modes including an optional Replicate pipeline.",
+      "version": "1.1.0",
       "author": {
         "name": "Michel Duek",
         "email": "166889728+michelbr84@users.noreply.github.com"

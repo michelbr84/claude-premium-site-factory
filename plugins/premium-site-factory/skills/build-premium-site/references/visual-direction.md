@@ -1,6 +1,9 @@
 # Visual Direction
 
-Avoid generic AI-startup design. Every choice below should look deliberate.
+Avoid generic AI-startup design. Every choice below should look deliberate — and every
+choice must express the site's written visual thesis (see `industry-patterns.md` for the
+per-industry starting points). These are craft rules, not a house style: two sites from
+this factory in different industries should share quality, never appearance.
 
 ## Typography
 - Two families max via `next/font`: a characterful display face (editorial serif, wide

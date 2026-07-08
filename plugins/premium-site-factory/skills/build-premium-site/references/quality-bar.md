@@ -7,6 +7,10 @@ against every line below before reporting success.
 
 - Complete page: every required section from `site-structure.md` exists with real copy.
 - Feels designed, not generated: a deliberate visual system, not framework defaults.
+- Specific to this business: passes the anti-clone pass in `deployment-checklist.md` —
+  a written visual thesis, industry-appropriate palette/voice/CTA, and a signature
+  section this industry earns (no recycled dark/gold, automotive metaphors, or route
+  maps by default).
 - Strong hero: full-screen, cinematic, readable headline, working CTAs.
 - Clear positioning: a visitor understands in 5 seconds what the company does and for whom.
 - Fully responsive: usable and polished at 360px, 768px, 1280px, 1920px.

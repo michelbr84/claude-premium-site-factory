@@ -24,11 +24,19 @@
 
 {{SERVICES_LIST}}
 
-## Visual direction
+## Visual thesis
 
+> The design contract for this site. Every visual decision traces back to these lines.
+
+{{VISUAL_THESIS}}
+
+- **Industry pattern used:** {{INDUSTRY_PATTERN}} (from the factory's industry-patterns
+  reference; adapted: {{PATTERN_ADAPTATIONS}})
 - **Palette:** {{PALETTE}}
 - **Typography:** {{TYPOGRAPHY}}
-- **Signature section concept:** {{SIGNATURE_CONCEPT}}
+- **Motion character:** {{MOTION_CHARACTER}}
+- **Signature section concept:** {{SIGNATURE_CONCEPT}} (why this industry earns it:
+  {{SIGNATURE_JUSTIFICATION}})
 
 ## ⚠️ Placeholders to replace before launch
 
@@ -40,6 +48,8 @@ Everything below was invented or assumed. Replace each item with real data.
 
 ## Assets
 
-- **Status:** {{ASSETS_STATUS}} (generated via Replicate / deterministic fallbacks)
+- **Mode:** {{ASSET_MODE}} (`no-api` / `prompts-only` / `generate-with-replicate`)
+- **Status:** {{ASSETS_STATUS}}
 - **Asset prompts / plan:** {{ASSETS_PLAN_LOCATION}}
-- To generate later: add `REPLICATE_API_TOKEN` to `.env.local`, then `npm run assets:generate`.
+- To generate later: add `REPLICATE_API_TOKEN` to `.env.local` (copy `.env.example`,
+  never commit it), then `npm run assets:generate`.

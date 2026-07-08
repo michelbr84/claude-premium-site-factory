@@ -21,9 +21,11 @@ Before writing any code, read these files from this skill's directory:
 - `references/quality-bar.md` — acceptance criteria the result must meet
 - `references/site-structure.md` — the required sections and what each must contain
 - `references/visual-direction.md` — design system guidance (read before styling)
+- `references/industry-patterns.md` — per-industry direction; find the closest pattern
+  to this business before forming the visual thesis
 
-Read `references/replicate-assets.md` only if asset generation comes up, and
-`references/deployment-checklist.md` when you reach QA.
+Read `references/replicate-assets.md` when you reach the assets step (it defines the
+three asset modes), and `references/deployment-checklist.md` when you reach QA.
 
 If a `frontend-design` skill or plugin is available in the session, apply its guidance on
 top of `visual-direction.md`.
@@ -36,6 +38,23 @@ phone/email/WhatsApp, domain, tone, colors, services, locations, proof points.
 
 Anything missing: invent a tasteful, clearly-fictional placeholder and **document every
 placeholder in `SITE_BRIEF.md`** so the user knows exactly what to replace.
+
+## Visual thesis — mandatory, before any styling
+
+Every site starts with a **visual thesis**: 3–5 written lines, derived from THIS business
+and the matching pattern in `references/industry-patterns.md`, stating — the emotional
+premise (what a visitor should feel), background world + palette temperature, type
+personality, motion character, and the signature-section concept. Record it in
+`SITE_BRIEF.md`. Every subsequent design decision must trace back to it.
+
+**No inherited defaults.** The factory has no house style. Unless the user asks for them
+or the business genuinely calls for them, do NOT default to: dark backgrounds with
+gold/champagne accents; automotive imagery or metaphors (fleet, horsepower, showroom,
+"concierge" language); route/delivery map sections; or any prior generated site's palette,
+section metaphors, or copy patterns. A dental clinic, a law firm, and a SaaS product must
+produce sites that could never be mistaken for each other or for a car-rental site.
+Dark + metallic accent is reserved for businesses where it earns its place (see the
+luxury-automotive pattern).
 
 ## Hard rules
 
@@ -80,29 +99,33 @@ Work in this order. Don't reorder motion before layout, or QA before content.
    - `scripts/start-localhost.sh` and `scripts/secret-scan.sh` (copy from this skill's
      `scripts/`, keep executable)
    Ensure `.gitignore` covers `.env*` (allowing `.env.example`), `.local/`, `.next/`.
-3. **Design system** — brand tokens (colors, type scale, spacing) in `@theme`, fonts via
+3. **Visual thesis** — write it (see the mandatory section above) into `SITE_BRIEF.md`,
+   naming which industry pattern you started from and what you changed for this brand.
+4. **Design system** — brand tokens (colors, type scale, spacing) in `@theme`, fonts via
    `next/font`, layout primitives (container, section, heading), buttons, nav, footer.
-   Follow `references/visual-direction.md`.
-4. **Content** — write all copy for every section now, in the site's language. Polished,
-   short, confident. No lorem ipsum anywhere.
-5. **Assets** — if `REPLICATE_API_TOKEN` exists in `.env.local`, follow
-   `references/replicate-assets.md`. Otherwise build deterministic fallbacks (SVG, CSS
-   gradients, canvas textures) and write ready-to-run asset prompts/scripts for later.
-   Never let missing assets block the site.
-6. **Build sections** — all required sections from `references/site-structure.md`, fully
+   Follow `references/visual-direction.md`, expressing the thesis — not a house style.
+5. **Content** — write all copy for every section now, in the site's language, in the
+   voice the industry pattern prescribes. Polished, short, confident. No lorem ipsum.
+6. **Assets** — pick the asset mode per `references/replicate-assets.md`:
+   `generate-with-replicate` if `REPLICATE_API_TOKEN` is available (small curated set),
+   `prompts-only` if the user wants prompts but has no token yet, `no-api` otherwise
+   (deterministic SVG/CSS fallbacks + prompts and a ready-to-run script left behind).
+   The user can force a mode by naming it. Never let missing assets block the site.
+7. **Build sections** — all required sections from `references/site-structure.md`, fully
    responsive, working anchors and CTAs.
-7. **Motion** — GSAP/ScrollTrigger only after the static layout works. Respect
+8. **Motion** — GSAP/ScrollTrigger only after the static layout works. Respect
    `prefers-reduced-motion`, simplify on mobile, never permanently hide content behind an
    animation.
-8. **QA** — run typecheck, lint (if configured), and `npm run build`; fix until green. Run
+9. **QA** — run typecheck, lint (if configured), and `npm run build`; fix until green. Run
    `bash scripts/secret-scan.sh` from the project root and fix anything it finds. Then walk
-   `references/deployment-checklist.md`. When everything passes, make the initial git
-   commit so the user gets a clean baseline.
-9. **Localhost** — start the dev server without blocking the session:
-   `bash scripts/start-localhost.sh` (finds a free port from 3000, binds 127.0.0.1, writes
-   `.local/dev.pid` and `.local/dev.log`, waits until the server responds, prints the URL).
-   Verify the URL actually returns HTML (`curl -s`) before reporting it.
-10. **Final report** — see below.
+   `references/deployment-checklist.md`, including its **anti-clone pass** — if the site
+   fails that pass, fix the design before reporting; do not ship a lookalike. When
+   everything passes, make the initial git commit so the user gets a clean baseline.
+10. **Localhost** — start the dev server without blocking the session:
+    `bash scripts/start-localhost.sh` (finds a free port from 3000, binds 127.0.0.1, writes
+    `.local/dev.pid` and `.local/dev.log`, waits until the server responds, prints the URL).
+    Verify the URL actually returns HTML (`curl -s`) before reporting it.
+11. **Final report** — see below.
 
 ## Final report
 
@@ -110,8 +133,11 @@ End with a report containing exactly:
 
 - project path and stack
 - **localhost URL**, the port, and how to stop the server (`kill $(cat .local/dev.pid)`)
+- the visual thesis (one line) and which industry pattern it grew from
 - sections implemented
-- assets: generated vs. fallback, and where asset prompts live if deferred
+- asset mode used (`no-api` / `prompts-only` / `generate-with-replicate`) and what exists
+  where; where asset prompts live if deferred
+- anti-clone pass result (what makes this site specific to this business)
 - env/secrets status: what `.env.example` contains, that no secret is tracked, secret-scan result
 - validation results: typecheck / lint / build, honestly (if something failed, say so)
 - every placeholder the user must replace (mirror of `SITE_BRIEF.md`)

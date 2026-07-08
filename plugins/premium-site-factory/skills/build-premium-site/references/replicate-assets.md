@@ -1,7 +1,17 @@
-# Replicate Asset Pipeline
+# Asset Modes & Replicate Pipeline
 
-Only relevant when the user wants generated assets. Never required — the site must work
-with fallbacks regardless.
+Every site runs in exactly one of three asset modes. Choose automatically, or obey the
+user if they name one. State the chosen mode in `SITE_BRIEF.md` and the final report.
+
+| Mode | When | What ships |
+|------|------|-----------|
+| `generate-with-replicate` | `REPLICATE_API_TOKEN` present (in `.env.local` or env) | A **small curated set** (typically 3–5 assets: hero, 1–2 section images, texture, OG image) generated via the script, plus fallbacks kept as safety net |
+| `prompts-only` | No token, but the user plans to generate later (or asks for prompts) | Deterministic fallbacks in active use + finalized prompts in `SITE_BRIEF.md` + ready-to-run `scripts/generate-assets.mjs` |
+| `no-api` | No token, no stated interest in generation | Deterministic SVG/CSS fallbacks designed as the *final* look (not placeholders) + the same script and prompts left behind quietly |
+
+In every mode the site must ship complete and premium — fallbacks are a design choice,
+not a degradation. `no-api` and `prompts-only` differ only in how prominently the
+generation path is documented and reported.
 
 ## Token rules
 
@@ -11,19 +21,22 @@ with fallbacks regardless.
 - All generation happens in local Node scripts (`scripts/generate-assets.mjs`) run at dev
   time — nothing calls Replicate from the browser or at runtime.
 
-## If no token is available
+## If no token is available (`prompts-only` / `no-api`)
 
 Do not stop. Build deterministic fallbacks (see `visual-direction.md`) and leave behind:
 - `scripts/generate-assets.mjs` — ready to run once a token exists
 - an asset plan with final prompts in `SITE_BRIEF.md` (or `assets-plan.md`)
 - `public/assets/fallbacks/` in active use by the site
 
-Tell the user in the final report how to add the token and run the script later.
+Tell the user in the final report how to add the token and run the script later
+(prominently in `prompts-only`, as a brief note in `no-api`).
 
 ## Asset plan before generating
 
 Write the plan first: which assets, exact prompts, aspect ratios, and where each is used.
-Generate only what the site actually uses — no random variation batches. Typical set:
+Generate only what the site actually uses — a small curated set, no random variation
+batches. Prompts must express THIS site's visual thesis (palette, light, mood from
+`SITE_BRIEF.md`), not a generic house look. Typical set:
 
 - hero backdrop (image, or video via an image-to-video model if requested) — 16:9 desktop
 - 1–3 section images sharing the same visual world — match section layout
