@@ -54,13 +54,13 @@ copy. CTA: book a demo.
 ```
 
 The skill will scaffold, define the visual thesis, design, write copy, build every
-section, produce **at least one real video** (hero loop, scroll sequence, or
-atmospheric layer — Replicate or procedural ffmpeg), add motion, run
-typecheck/build/secret-scan plus an **anti-clone QA pass** (the site must be specific
-to your business — no recycled styling) and a **video QA pass**, start a dev server in
-the background, and report the localhost URL plus every placeholder it invented
-(documented in the generated `SITE_BRIEF.md`). Full briefs for these and more live in
-[`examples/`](./examples).
+section, produce an **active video experience** (hero autoplay loop and/or
+scroll-driven video — Replicate or procedural ffmpeg; optionally a consent-gated
+soundtrack), add motion, run typecheck/build/secret-scan plus an **anti-clone QA
+pass** (the site must be specific to your business — no recycled styling) and a
+**blocking video QA pass**, start a dev server in the background, and report the
+localhost URL plus every placeholder it invented (documented in the generated
+`SITE_BRIEF.md`). Full briefs for these and more live in [`examples/`](./examples).
 
 ## What you get in a generated site
 
@@ -70,11 +70,16 @@ the background, and report the localhost URL plus every placeholder it invented
 - A written visual thesis per site, grown from industry patterns (restaurant,
   dental/medical, law, SaaS, architecture, fitness, semiconductor, local service,
   luxury automotive, real estate) — no two industries look alike
-- **At least one real video** on every site (hero cinematic loop, scroll-driven
-  sequence, signature video section, or atmospheric layer) — generated via Replicate
-  when a token exists, or built procedurally with ffmpeg; poster fallback,
-  muted/playsInline, reduced-motion handled. If no video can be produced, the report
-  says so honestly instead of faking it
+- An **active cinematic video experience** on every site: a hero video that visibly
+  autoplays on load (muted, looped, playsInline, poster fallback) and/or a
+  scroll-driven video that advances as you scroll (ScrollTrigger scrub or rAF
+  controller) — a static video tag doesn't count. Generated via Replicate when a
+  token exists, or built procedurally with ffmpeg; the report grades
+  `HERO AUTOPLAY VIDEO` and `SCROLL-DRIVEN VIDEO` PASS/FAIL honestly
+- An **optional soundtrack layer** that never autoplays: off by default, starts only
+  from an explicit "Enable sound" / "Ativar trilha" control, low volume, pause/mute —
+  generated with MiniMax Music on Replicate (`minimax/music-2.6`) when a token
+  exists, or left as a polished prompt (`MUSIC: PROMPT-ONLY`)
 - `SITE_BRIEF.md` (visual thesis + video status + content source of truth +
   placeholder list), `README.md`, `CLAUDE.md`
 - `scripts/start-localhost.sh` (background dev server) and `scripts/secret-scan.sh`
@@ -86,11 +91,12 @@ Every generated site uses one of three modes (auto-detected, or name one in your
 
 | Mode | When | What you get |
 |------|------|--------------|
-| `generate-with-replicate` | `REPLICATE_API_TOKEN` available | A small curated set of generated assets (hero, section images, OG image, **one short video**) + fallbacks as safety net |
+| `generate-with-replicate` | `REPLICATE_API_TOKEN` available | A small curated set of generated assets (hero, section images, OG image, **one short video**, optionally a MiniMax soundtrack) + fallbacks as safety net |
 | `prompts-only` | No token yet, you'll generate later | Designed SVG/CSS fallbacks in use + finalized prompts + a ready-to-run script; video built procedurally (ffmpeg) |
 | `no-api` | No token, no generation planned | Deterministic SVG/CSS visuals designed as the final look; video built procedurally (ffmpeg) |
 
-The mandatory video ships in **every** mode — only the production method changes.
+The mandatory active video ships in **every** mode — only the production method
+changes. The soundtrack is optional in every mode and never blocks the build.
 
 ### Using `REPLICATE_API_TOKEN` safely
 

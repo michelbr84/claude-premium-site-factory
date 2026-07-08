@@ -9,13 +9,18 @@ premium cinematic marketing website from an empty folder in a single pass:
   luxury automotive, real estate) — no house style, no lookalike sites
 - Full landing page: cinematic hero, manifesto, services, signature visual section,
   story/process, showcase, trust layer, final CTA
-- **Mandatory real video** on every site (hero loop, scroll-driven sequence, signature
-  video section, or atmospheric layer) — Replicate-generated with a token, procedural
-  ffmpeg without; poster + muted/playsInline + reduced-motion handled; honest FAILED
-  status in the report if no video could be produced
+- **Mandatory ACTIVE video** on every site: hero video that visibly autoplays on load
+  and/or a scroll-driven video that advances with scroll — a static video tag doesn't
+  pass. Replicate-generated with a token, procedural ffmpeg without; poster +
+  muted/playsInline + reduced-motion handled; the report grades
+  `HERO AUTOPLAY VIDEO` / `SCROLL-DRIVEN VIDEO` PASS/FAIL honestly
+- **Optional consent-gated soundtrack**: never autoplays, off by default, explicit
+  "Enable sound"/"Ativar trilha" control, low volume, pause/mute — MiniMax Music
+  (`minimax/music-2.6`) via Replicate with a token, or an honest
+  `MUSIC: PROMPT-ONLY`/`FAILED` status
 - QA: typecheck, build, secret scan, responsive + accessibility checklist, an
   anti-clone pass (industry-appropriate palette, copy voice, CTA, signature section),
-  and a blocking video QA pass
+  a blocking video QA pass, and a non-blocking music QA pass
 - Background localhost dev server with the URL handed to you
 - Three asset modes: `no-api` (designed SVG/CSS visuals), `prompts-only` (fallbacks +
   finalized prompts + ready-to-run script), `generate-with-replicate` (small curated
@@ -47,7 +52,8 @@ on localhost.
 skills/build-premium-site/
   SKILL.md           # the skill entrypoint and workflow
   references/        # quality bar, site structure, visual direction, industry patterns,
-                     # video direction, asset modes, QA checklist (anti-clone + video passes)
+                     # video direction (active experience), audio direction (consent-gated
+                     # soundtrack), asset modes, QA checklist (anti-clone + video + music)
   templates/         # env.example, SITE_BRIEF, README, CLAUDE.md templates for generated sites
   scripts/           # start-localhost.sh, secret-scan.sh (copied into generated sites)
 ```

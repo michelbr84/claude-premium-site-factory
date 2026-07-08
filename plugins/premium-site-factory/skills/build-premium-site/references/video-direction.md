@@ -1,9 +1,21 @@
 # Video Direction
 
-Every generated site MUST ship at least one **real video**: an actual `.mp4`/`.webm`
-file on disk, served from the app's public directory, embedded with an HTML `<video>`
-element, and visible on the final page. This is a blocking requirement (see the Video QA
-pass in `deployment-checklist.md`).
+Every generated site MUST ship an **active cinematic video experience** — a real video
+that visibly PLAYS, not merely exists. This is a blocking requirement (see the Video QA
+pass in `deployment-checklist.md`) with two qualifying modes; ship at least one:
+
+- **HERO AUTOPLAY VIDEO** — a hero video that visibly starts playing on page load,
+  without any user scroll or interaction (muted, looped, playsInline, poster).
+- **SCROLL-DRIVEN VIDEO** — a video whose playback visibly advances with scroll
+  progress (ScrollTrigger scrub or a robust scroll→`currentTime` controller).
+
+A static or paused `<video>` element sitting on the page satisfies NOTHING. The final
+report must grade both modes explicitly (`HERO AUTOPLAY VIDEO: PASS/FAIL`,
+`SCROLL-DRIVEN VIDEO: PASS/FAIL`) and say which one carries the requirement.
+
+The base rule from v1.2 still applies: the video is an actual `.mp4`/`.webm` file on
+disk, served from the app's public directory, embedded with an HTML `<video>` element,
+and visible on the final page.
 
 ## What counts — and what doesn't
 
@@ -25,15 +37,79 @@ success without a playing video.
 
 ## Placement — intentional, not decorative
 
-Choose at least one, driven by the visual thesis:
+Choose at least one QUALIFYING placement (1 or 2), driven by the visual thesis:
 
-1. **Hero cinematic loop** — full-bleed background, 4–8s seamless loop.
-2. **Scroll-driven sequence** — a product/brand video scrubbed or revealed with
-   ScrollTrigger (build the plain autoplay version FIRST; add scroll control only after
-   it works).
+1. **Hero cinematic loop** (qualifies as HERO AUTOPLAY) — full-bleed background, 4–8s
+   seamless loop, visibly playing the moment the page loads.
+2. **Scroll-driven sequence** (qualifies as SCROLL-DRIVEN) — a product/brand video
+   scrubbed or revealed with ScrollTrigger (build the plain autoplay version FIRST; add
+   scroll control only after it works).
 3. **Signature visual video section** — the centerpiece section built around a video.
+   Qualifies only if it also autoplays in view (hero-style) or scrubs with scroll.
 4. **Atmospheric background layer** — subtle motion behind content (low contrast,
-   heavily scrimmed, never fighting the text).
+   heavily scrimmed, never fighting the text). Qualifies as autoplay if it visibly
+   plays on load in the first viewport; a below-the-fold ambience layer alone does not
+   carry the requirement.
+
+## Implementation patterns for the two qualifying modes
+
+### Hero autoplay (mode A)
+
+The `BrandVideo` component below already covers it. The traps that break "visibly
+plays on load":
+
+- The React SSR `muted` trap (see component spec) — without the ref/effect fix, some
+  browsers refuse autoplay because the attribute never reaches the DOM.
+- `preload="metadata"` + slow first paint: for the hero specifically use
+  `preload="auto"` and keep the file small (≤ 4MB) so playback starts immediately.
+- Low Power Mode / data-saver / reduced-motion legitimately block autoplay — the
+  poster must make the hero look complete in those cases (that is the designed
+  fallback, not a failure).
+- Verify in the running page, not by reading your own JSX: the element must report
+  `paused === false` shortly after load in a normal browser context.
+
+### Scroll-driven (mode B)
+
+Two sound approaches; pick one:
+
+1. **GSAP ScrollTrigger scrub** — pin the section, map scroll progress to
+   `video.currentTime`:
+
+   ```ts
+   // client component; video must be muted+playsInline, preload="auto"
+   useGSAP(() => {
+     const video = videoRef.current!;
+     const st = ScrollTrigger.create({
+       trigger: sectionRef.current, start: 'top top', end: '+=200%',
+       pin: true, scrub: 0.5,
+       onUpdate: (self) => {
+         if (video.duration) video.currentTime = self.progress * video.duration;
+       },
+     });
+     return () => st.kill();
+   }, []);
+   ```
+
+2. **rAF scroll-progress controller** (no pin, robust and dependency-light): on scroll,
+   compute the section's progress through the viewport, lerp a target time, and write
+   `currentTime` inside a `requestAnimationFrame` loop (never directly in the scroll
+   handler — thrashing `currentTime` on every scroll event stutters).
+
+Scrubbing requirements (both approaches):
+
+- **Re-encode for scrubbing**: seeking every frame needs dense keyframes —
+  `ffmpeg -i in.mp4 -c:v libx264 -pix_fmt yuv420p -g 1 -movflags +faststart scrub.mp4`
+  (`-g 1` = every frame a keyframe; file grows, so keep scrub videos short/small, e.g.
+  ≤ 10s at 720–1080p). Without this, `currentTime` seeks snap to sparse keyframes and
+  the "scrub" visibly stutters or jumps.
+- The video element is muted + playsInline with poster, `preload="auto"`.
+- Reduced motion: no pinned scrubbing — show the video as a plain paused poster/frame
+  or a gentle autoplay if appropriate; the content must remain fully readable.
+- Mobile: test that touch scroll drives it; if the pinned scene fights mobile UX,
+  serve the autoplay loop instead on small screens (mode A then carries the page — say
+  so in the report).
+- Fallback if scripting fails: the video should sit at its poster/first frame, not a
+  black box.
 
 ## Reusable component — build once, use everywhere
 
@@ -134,6 +210,11 @@ Grow the concept from the visual thesis; these are starting points, same rules a
 
 1. Produce the video file (Replicate → procedural → report failure honestly).
 2. Export the poster; wire both through `BrandVideo`.
-3. Verify autoplay works in the served page (muted + playsInline present in DOM).
-4. Only then add scroll-driven behavior (ScrollTrigger scrub/pin) if the design calls
-   for it, with the plain autoplay version as the reduced-motion/mobile path.
+3. Verify autoplay works in the served page (muted + playsInline present in DOM, and
+   the element actually reports playing — see Video QA).
+4. Only then add scroll-driven behavior (ScrollTrigger scrub/pin or the rAF
+   controller) if the design calls for it — re-encoded with dense keyframes — with the
+   plain autoplay version as the reduced-motion/mobile path.
+5. Grade both modes for the final report: HERO AUTOPLAY VIDEO PASS/FAIL,
+   SCROLL-DRIVEN VIDEO PASS/FAIL. At least one must PASS; otherwise the video
+   requirement is FAILED and the report says exactly why.

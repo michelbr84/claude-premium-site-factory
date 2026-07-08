@@ -25,28 +25,67 @@ the failing part before shipping — do not rationalize.
 - [ ] Structure test: section order/labels were chosen for this brand, not copied from a
       reference site or a previous run
 
-## Video QA pass (blocking)
+## Video QA pass (blocking) — active experience required
 
-The site must ship at least one real video (`video-direction.md`). Verify against the
-BUILT site, not the source you think you wrote. If any check fails and cannot be fixed,
-the final report must say `VIDEO REQUIREMENT: FAILED` with the exact reason — never
-report success without a playing video.
+The site must ship an ACTIVE video experience (`video-direction.md`): the video must
+visibly play on load (hero autoplay) and/or visibly advance with scroll (scroll-driven).
+A static `<video>` tag does not pass. Verify against the BUILT site, not the source you
+think you wrote. Grade both modes; at least one must PASS or the final report says
+`VIDEO REQUIREMENT: FAILED` with the exact reason — never report success without a
+playing video.
 
-- [ ] At least one `<video>` element exists in the served page
-      (`curl -s <url> | grep -c '<video'` ≥ 1)
+File & page basics (prerequisites for either mode):
+- [ ] At least one `<video>` element exists and is visible in the served page
+      (`curl -s <url> | grep -c '<video'` ≥ 1; not `display:none`, not zero-sized)
 - [ ] The referenced video file exists locally under `public/assets/video/` or
       `public/media/video/` and is a real video, not an empty placeholder
       (size > ~100KB AND `ffprobe` reports a video stream with duration > 1s — or, if
       ffprobe is unavailable, the file plays as the page background and its size is
       plausible for its duration)
-- [ ] The page/section where the video appears is reachable (curl the URL, confirm the
-      section renders)
-- [ ] Autoplay videos are `muted` and `playsInline` (and muted is ALSO set via
-      ref/effect — React may drop the SSR attribute), `loop` where intended
+- [ ] The page/section where the video appears is reachable on localhost (curl the
+      URL, confirm the section renders)
 - [ ] A poster image exists and is wired up; reduced-motion shows a complete page
 - [ ] Video file size within targets (hero ≤ 4MB; nothing absurd shipped)
+
+HERO AUTOPLAY VIDEO — PASS requires all of:
+- [ ] `autoPlay`, `loop`, `playsInline` present, and `muted` set BOTH as prop and via
+      ref/effect (React may drop the SSR attribute; without it autoplay silently fails)
+- [ ] `preload="auto"` (hero) and the file is small enough to start immediately
+- [ ] The video visibly plays without any scroll or interaction — verified in the
+      running page (e.g. the element reports `paused === false` after load, or two
+      DOM/screenshot samples a second apart differ), not assumed from the JSX
+- [ ] In the first viewport (a below-the-fold ambience layer does not make hero PASS)
+
+SCROLL-DRIVEN VIDEO — PASS requires all of:
+- [ ] Scroll position visibly drives playback: scrolling changes `video.currentTime`
+      (ScrollTrigger scrub or rAF controller) — verified by sampling `currentTime` at
+      two scroll positions in the running page
+- [ ] The scrub source was re-encoded with dense keyframes (`-g 1`) so seeking is
+      smooth, and the file stays reasonably sized (short clip)
+- [ ] muted + playsInline + poster still present; reduced-motion path shows a complete,
+      readable page without the pinned scene
+- [ ] Mobile: touch scrolling drives it acceptably, or small screens fall back to the
+      autoplay loop (then hero mode must be the one that carries the requirement)
+
+Security (always):
 - [ ] No token or secret appears in the video pipeline's source, logs, or generated
       assets; `.env.local` remains gitignored (secret scan still green after video work)
+
+## Music QA pass (non-blocking — only if a soundtrack ships)
+
+Music never blocks the build. If a soundtrack is present (`audio-direction.md`):
+
+- [ ] Audio file is local under `public/assets/audio/` or `public/media/audio/`,
+      non-empty, reasonable size (≤ ~4MB; short loop or 1–2 min bed)
+- [ ] NO autoplay of audible sound anywhere: no `<audio autoplay>`, no unmuted
+      video-with-sound, no play() call outside an explicit user-gesture handler
+- [ ] Sound starts ONLY from an explicit control ("Enable sound" / "Play soundtrack" /
+      "Ativar trilha"); default state is OFF on every load (no sticky auto-resume)
+- [ ] Pause/mute control visible while playing; default volume low (~0.15–0.35)
+- [ ] Control is keyboard-accessible with a proper label/`aria-pressed`; doesn't cover
+      content or break mobile nav; audio file is `preload="none"` until enabled
+- [ ] If no audio could be generated: `SITE_BRIEF.md` holds the polished soundtrack
+      prompt and the report says `MUSIC: PROMPT-ONLY` (or `MUSIC: FAILED` with reason)
 
 ## Build & code
 - [ ] `npx tsc --noEmit` clean

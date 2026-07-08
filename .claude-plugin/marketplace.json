@@ -9,8 +9,8 @@
     {
       "name": "premium-site-factory",
       "source": "./plugins/premium-site-factory",
-      "description": "Build complete premium cinematic company websites from empty folders — Next.js, Tailwind CSS, GSAP, per-industry visual theses with an anti-clone QA pass, a mandatory real video on every site (Replicate or procedural ffmpeg), build validation, secret scan, and localhost preview.",
-      "version": "1.2.0",
+      "description": "Build complete premium cinematic company websites from empty folders — Next.js, Tailwind CSS, GSAP, per-industry visual theses with an anti-clone QA pass, a mandatory ACTIVE video experience on every site (hero autoplay and/or scroll-driven; Replicate or procedural ffmpeg), an optional consent-gated soundtrack (MiniMax Music), build validation, secret scan, and localhost preview.",
+      "version": "1.3.0",
       "author": {
         "name": "Michel Duek",
         "email": "166889728+michelbr84@users.noreply.github.com"

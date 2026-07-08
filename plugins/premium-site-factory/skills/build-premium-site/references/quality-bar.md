@@ -11,10 +11,15 @@ against every line below before reporting success.
   a written visual thesis, industry-appropriate palette/voice/CTA, and a signature
   section this industry earns (no recycled dark/gold, automotive metaphors, or route
   maps by default).
-- Ships at least one real video (`.mp4`/`.webm` on disk, embedded via `<video>`,
-  visible on the page, poster + muted/playsInline/reduced-motion handled) — passes the
-  video QA pass in `deployment-checklist.md`, or the report honestly marks the video
-  requirement as failed.
+- Ships an ACTIVE video experience: a real `.mp4`/`.webm` on disk, embedded via a
+  visible `<video>`, that visibly autoplays in the hero on load and/or visibly
+  advances with scroll (poster + muted/playsInline/reduced-motion handled) — passes
+  the video QA pass in `deployment-checklist.md` with `HERO AUTOPLAY VIDEO: PASS` or
+  `SCROLL-DRIVEN VIDEO: PASS`, or the report honestly marks the video requirement as
+  failed. A static/paused video tag does not pass.
+- If a soundtrack ships, it is consent-gated: off by default, plays only after an
+  explicit user action, low volume, pause/mute control — passes the (non-blocking)
+  music QA pass.
 - Strong hero: full-screen, cinematic, readable headline, working CTAs.
 - Clear positioning: a visitor understands in 5 seconds what the company does and for whom.
 - Fully responsive: usable and polished at 360px, 768px, 1280px, 1920px.

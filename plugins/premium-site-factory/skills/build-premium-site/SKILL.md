@@ -23,8 +23,11 @@ Before writing any code, read these files from this skill's directory:
 - `references/visual-direction.md` — design system guidance (read before styling)
 - `references/industry-patterns.md` — per-industry direction; find the closest pattern
   to this business before forming the visual thesis
-- `references/video-direction.md` — the mandatory-video requirement: what counts,
-  placements, the reusable component, generation paths, per-industry concepts
+- `references/video-direction.md` — the mandatory active-video requirement: hero
+  autoplay / scroll-driven modes, the reusable component, generation paths,
+  per-industry concepts
+- `references/audio-direction.md` — optional consent-gated soundtrack layer (never
+  autoplays with sound); read it if the user wants music or the brand would benefit
 
 Read `references/replicate-assets.md` when you reach the assets step (it defines the
 three asset modes and the video-generation workflow), and
@@ -59,17 +62,24 @@ produce sites that could never be mistaken for each other or for a car-rental si
 Dark + metallic accent is reserved for businesses where it earns its place (see the
 luxury-automotive pattern).
 
-## Mandatory video — every site ships real motion
+## Mandatory video — an ACTIVE cinematic experience, not a video tag
 
-Every generated site MUST include at least one **real video**: an actual `.mp4`/`.webm`
-file stored under `public/assets/video/` (or `public/media/video/`), embedded with an
-HTML `<video>` element, and visible on the final page — as a hero cinematic loop, a
-scroll-driven sequence, a signature video section, or an atmospheric background layer.
-CSS/SVG/canvas/Lottie animation and GIFs do NOT satisfy this unless rendered into a
-real video file. Follow `references/video-direction.md` for the component, specs, and
-generation paths (Replicate when a token exists; procedural ffmpeg otherwise). If no
-real video can be produced, the report must mark the video requirement as FAILED and
-say exactly what was missing — never fake it.
+Every generated site MUST include at least one **real video that visibly plays**: an
+actual `.mp4`/`.webm` under `public/assets/video/` (or `public/media/video/`), embedded
+with a visible HTML `<video>` element, satisfying at least ONE of:
+
+- **HERO AUTOPLAY** — the hero video starts playing on load, without any scroll or
+  interaction (muted, loop, playsInline, poster fallback), or
+- **SCROLL-DRIVEN** — a video whose playback visibly advances with scroll progress
+  (GSAP ScrollTrigger scrub or a robust rAF scroll→`currentTime` controller).
+
+A static or paused `<video>` on the page does NOT satisfy the requirement.
+CSS/SVG/canvas/Lottie animation and GIFs do NOT satisfy it unless rendered into a real
+video file. Follow `references/video-direction.md` for the component, both
+implementation patterns, specs, and generation paths (Replicate when a token exists;
+procedural ffmpeg otherwise). If no qualifying video experience can be produced, the
+report must mark the video requirement as FAILED and say exactly what was missing —
+never fake it.
 
 ## Hard rules
 
@@ -129,12 +139,17 @@ Work in this order. Don't reorder motion before layout, or QA before content.
    **In every mode, produce the mandatory video now** (see `references/video-direction.md`):
    with a token, attempt a short curated Replicate video; without one (or on failure),
    build a procedural video via ffmpeg. Export its poster. Record the outcome honestly.
+   If the user wants a soundtrack (or the brand clearly benefits), also work the audio
+   ladder in `references/audio-direction.md` — optional, non-blocking, never autoplay.
 7. **Build sections** — all required sections from `references/site-structure.md`, fully
    responsive, working anchors and CTAs. Wire the video(s) in through the reusable
-   `BrandVideo` component (poster, muted+playsInline, reduced-motion path).
+   `BrandVideo` component (poster, muted+playsInline, reduced-motion path) so the hero
+   autoplays visibly on load. If shipping a soundtrack, add the consent-gated
+   `SoundToggle` (off by default, low volume, pause control).
 8. **Motion** — GSAP/ScrollTrigger only after the static layout works. Respect
    `prefers-reduced-motion`, simplify on mobile, never permanently hide content behind an
-   animation. Scroll-driven video only after the plain autoplay version works.
+   animation. Scroll-driven video only after the plain autoplay version works (dense
+   keyframes re-encode; scrub via ScrollTrigger or the rAF controller).
 9. **QA** — run typecheck, lint (if configured), and `npm run build`; fix until green. Run
    `bash scripts/secret-scan.sh` from the project root and fix anything it finds. Then walk
    `references/deployment-checklist.md`, including its **anti-clone pass** and its
@@ -157,11 +172,19 @@ End with a report containing exactly:
 - sections implemented
 - asset mode used (`no-api` / `prompts-only` / `generate-with-replicate`) and what exists
   where; where asset prompts live if deferred
-- **video status**: path(s) of the video file(s), where each appears on the page, file
-  size, poster/fallback status, and confirmation that autoplay/loop/muted/playsInline
-  are configured; how it was produced (Replicate / procedural / provided) — or, if no
-  real video could be produced, `VIDEO REQUIREMENT: FAILED` with exactly what was
-  missing and the script/prompts left behind to fix it
+- **video status** — all of:
+  - `HERO AUTOPLAY VIDEO: PASS/FAIL` and `SCROLL-DRIVEN VIDEO: PASS/FAIL`, and which
+    mode carries the mandatory requirement
+  - whether the video visibly plays without interaction (hero) and/or visibly advances
+    on scroll (scroll mode)
+  - video file path(s), placement on the page, file size, duration, poster path
+  - autoplay/muted/loop/playsInline configuration status
+  - how it was produced (Replicate / procedural / provided)
+  - or, if neither mode passes, `VIDEO REQUIREMENT: FAILED` with exactly what was
+    missing and the script/prompts left behind to fix it
+- **music status**: `MUSIC: SHIPPED` (file path, size, how produced, consent UI
+  present) / `MUSIC: PROMPT-ONLY` (where the prompt lives) / `MUSIC: FAILED` (why) /
+  `MUSIC: SKIPPED` (user didn't want it) — see `references/audio-direction.md`
 - anti-clone pass result (what makes this site specific to this business)
 - env/secrets status: what `.env.example` contains, that no secret is tracked, secret-scan result
 - validation results: typecheck / lint / build, honestly (if something failed, say so)

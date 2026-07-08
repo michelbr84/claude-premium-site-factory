@@ -54,13 +54,28 @@ Everything below was invented or assumed. Replace each item with real data.
 - To generate later: add `REPLICATE_API_TOKEN` to `.env.local` (copy `.env.example`,
   never commit it), then `npm run assets:generate`.
 
-## Video (mandatory)
+## Video (mandatory — active experience)
 
-- **Status:** {{VIDEO_STATUS}} (shipped / FAILED — what's missing: {{VIDEO_MISSING}})
+- **HERO AUTOPLAY VIDEO:** {{HERO_VIDEO_PASS_FAIL}}
+- **SCROLL-DRIVEN VIDEO:** {{SCROLL_VIDEO_PASS_FAIL}}
+- **Requirement carried by:** {{QUALIFYING_MODE}}
 - **Concept:** {{VIDEO_CONCEPT}}
 - **File(s):** {{VIDEO_FILES}} (path, size, duration)
 - **Placement:** {{VIDEO_PLACEMENT}} (hero loop / scroll sequence / signature section /
   atmospheric layer)
+- **Attributes:** autoplay {{ATTR_AUTOPLAY}} · muted {{ATTR_MUTED}} · loop
+  {{ATTR_LOOP}} · playsInline {{ATTR_PLAYSINLINE}}
 - **Produced via:** {{VIDEO_METHOD}} (Replicate / procedural ffmpeg / provided)
 - **Poster:** {{VIDEO_POSTER}}
 - To regenerate or upgrade: {{VIDEO_REGEN_INSTRUCTIONS}}
+
+## Music (optional — consent-gated)
+
+- **Status:** {{MUSIC_STATUS}} (SHIPPED / PROMPT-ONLY / FAILED / SKIPPED)
+- **File:** {{MUSIC_FILE}} (path, size, duration) — or prompt location if PROMPT-ONLY
+- **Produced via:** {{MUSIC_METHOD}} (e.g. minimax/music-2.6 via Replicate /
+  procedural / n-a)
+- **Consent UI:** {{MUSIC_CONSENT_UI}} (control label + placement; default OFF,
+  low volume, pause/mute available)
+- **Soundtrack prompt (for regeneration):** {{MUSIC_PROMPT}}
+- Note: review Replicate/MiniMax terms for commercial use of generated audio.

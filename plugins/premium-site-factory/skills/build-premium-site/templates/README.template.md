@@ -46,10 +46,15 @@ The site works fully without this — deterministic fallbacks are used instead.
   `video/` (the site's video asset(s) + posters)
 - `scripts/` — localhost runner, secret scan, asset/video generation
 
-## Video
+## Video & sound
 
-This site ships a real video (see `SITE_BRIEF.md` → Video for concept, file, placement,
-and how to regenerate or upgrade it).
+This site ships an active video experience — the hero video plays automatically
+(muted) and/or a section is scroll-driven (see `SITE_BRIEF.md` → Video for the
+PASS/FAIL grading, files, placement, and how to regenerate or upgrade).
+
+If a soundtrack is included, it never autoplays: sound starts only from the
+"Enable sound" / "Ativar trilha" control, defaults to off, and can be paused at any
+time (see `SITE_BRIEF.md` → Music).
 
 ## Deploy
 

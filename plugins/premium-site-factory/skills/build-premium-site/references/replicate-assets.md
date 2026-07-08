@@ -95,6 +95,31 @@ counts). Work through this ladder and stop at the first success:
 Store videos only under `public/assets/video/` or `public/media/video/`. Posters live
 next to their video or under `public/assets/` with the other imagery.
 
+**Active-experience note:** producing the file is half the requirement — the shipped
+site must use it as a hero autoplay loop and/or a scroll-driven sequence
+(`video-direction.md`). For a scroll-scrub video, also produce the dense-keyframe
+re-encode (`-g 1`).
+
+## Optional audio workflow (soundtrack — never blocks the build)
+
+Only when the user wants music or the brand clearly benefits (`audio-direction.md` has
+the full UX/consent rules — sound NEVER autoplays):
+
+1. **Token present:** generate ONE short tasteful piece with `minimax/music-2.6` on
+   Replicate (fallback `minimax/music-2.5`; verify the slug exists before calling).
+   Usually `is_instrumental: true` + a `prompt` derived from the visual thesis
+   (mood, tempo/BPM, key, instrumentation). Save under `public/assets/audio/` (or
+   `public/media/audio/`), mp3, ≤ ~4MB (trim/re-encode with ffmpeg if needed). Wire it
+   through the consent-gated `SoundToggle` — off by default, low volume.
+   Music generation is slow (1–3+ min) — poll patiently; failure here never fails the
+   site.
+2. **No token / generation failed:** write the polished soundtrack prompt into
+   `SITE_BRIEF.md`, leave a ready-to-run generation script, and report
+   `MUSIC: PROMPT-ONLY` (or `MUSIC: FAILED` with the reason). A procedural ambient
+   placeholder ships only if genuinely tasteful.
+
+Same token rules as everything else; audio adds no new env vars.
+
 ## Optimization
 
 - Images: convert to WebP/AVIF (sharp), responsive sizes via `next/image`.

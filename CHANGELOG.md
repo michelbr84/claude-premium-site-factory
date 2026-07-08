@@ -1,5 +1,45 @@
 # Changelog
 
+## 1.3.0 — 2026-07-08
+
+Active-video + optional-soundtrack release. A video file on the page is no longer
+enough — it must visibly play; and sites may ship a soundtrack that only plays with
+the user's explicit permission.
+
+### Changed — video requirement hardened
+- The mandatory video is now an **active cinematic experience**: at least one of
+  `HERO AUTOPLAY VIDEO` (visibly playing on load — muted, loop, playsInline, poster,
+  no scroll or interaction needed) or `SCROLL-DRIVEN VIDEO` (playback visibly advances
+  with scroll via GSAP ScrollTrigger scrub or a rAF scroll→`currentTime` controller)
+  must PASS. A static or paused `<video>` tag satisfies nothing.
+- `references/video-direction.md`: implementation patterns for both modes — hero
+  autoplay traps (React SSR muted workaround, `preload="auto"`, Low Power Mode
+  poster fallback) and scroll-scrub requirements (dense-keyframe re-encode with
+  `-g 1`, rAF-throttled `currentTime` writes, pinned-scene reduced-motion and mobile
+  fallbacks).
+- Blocking video QA in `references/deployment-checklist.md` now verifies actual
+  playback in the served page (element reports playing; `currentTime` responds to
+  scroll), not just file presence.
+- Final report format: `HERO AUTOPLAY VIDEO: PASS/FAIL`, `SCROLL-DRIVEN VIDEO:
+  PASS/FAIL`, which mode carries the requirement, path, placement, size, duration,
+  poster, and autoplay/muted/loop/playsInline status.
+
+### Added — optional consent-gated soundtrack
+- `references/audio-direction.md`: a soundtrack layer that **never autoplays** —
+  off by default on every load, starts only from an explicit control ("Enable sound" /
+  "Play soundtrack" / "Ativar trilha"), low default volume, pause/mute control,
+  keyboard-accessible, `preload="none"` until enabled, pauses on hidden tab.
+- Audio generation ladder: with `REPLICATE_API_TOKEN`, one short tasteful piece via
+  **`minimax/music-2.6`** on Replicate (fallback `minimax/music-2.5`; slug verified
+  before calling; usually `is_instrumental` with a thesis-derived style prompt),
+  saved under `public/assets/audio/`; without a token or on failure, a polished
+  soundtrack prompt and an honest `MUSIC: PROMPT-ONLY` / `MUSIC: FAILED` status.
+  Music never blocks the build.
+- Non-blocking music QA pass in the deployment checklist (local non-empty file, no
+  audible autoplay anywhere, consent control accessible, low volume, default off).
+- `SITE_BRIEF.md` template: video PASS/FAIL block and music status block (file,
+  model, consent UI, regeneration prompt).
+
 ## 1.2.0 — 2026-07-08
 
 Mandatory real-video release. Every generated site now ships at least one actual video

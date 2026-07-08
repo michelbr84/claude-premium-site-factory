@@ -14,7 +14,12 @@ Tailwind v4 (tokens in `src/app/globals.css` under `@theme`) + GSAP/ScrollTrigge
 - Every animation needs a `prefers-reduced-motion` path and a sane mobile variant.
 - Videos go through `src/components/ui/BrandVideo.tsx` (poster required, muted +
   playsInline, reduced-motion shows the poster); files live in `public/assets/video/`,
-  hero loops stay ≤ 4MB. The site must always keep at least one real video on the page.
+  hero loops stay ≤ 4MB. The site must always keep an ACTIVE video experience: the
+  hero video autoplays visibly on load and/or a scroll section drives
+  `video.currentTime` — never downgrade it to a static/paused tag.
+- Sound (if present) goes through `src/components/ui/SoundToggle.tsx`: OFF by default,
+  plays only on explicit click, low volume, pause/mute control. Never add autoplaying
+  audio or unmuted video. Audio files live in `public/assets/audio/`.
 - Before committing: `npm run build` must pass and `bash scripts/secret-scan.sh` must be clean.
 
 ## Commands
