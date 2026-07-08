@@ -10,6 +10,7 @@ Domain: meridiandrive.example.com. Email: concierge@meridiandrive.example.com.
 Style: cinematic, dark, champagne-gold accents, editorial typography, restrained motion.
 Services: exotic fleet rental, chauffeur service, airport delivery, event rentals.
 Signature section idea: an animated route map of Miami delivery zones.
+Video idea: asphalt at dusk with headlight trails as the hero cinematic loop.
 No Replicate token — use deterministic fallbacks and leave asset prompts for later.
 ```
 

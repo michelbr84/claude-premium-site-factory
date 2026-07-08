@@ -23,9 +23,12 @@ Before writing any code, read these files from this skill's directory:
 - `references/visual-direction.md` — design system guidance (read before styling)
 - `references/industry-patterns.md` — per-industry direction; find the closest pattern
   to this business before forming the visual thesis
+- `references/video-direction.md` — the mandatory-video requirement: what counts,
+  placements, the reusable component, generation paths, per-industry concepts
 
 Read `references/replicate-assets.md` when you reach the assets step (it defines the
-three asset modes), and `references/deployment-checklist.md` when you reach QA.
+three asset modes and the video-generation workflow), and
+`references/deployment-checklist.md` when you reach QA.
 
 If a `frontend-design` skill or plugin is available in the session, apply its guidance on
 top of `visual-direction.md`.
@@ -55,6 +58,18 @@ section metaphors, or copy patterns. A dental clinic, a law firm, and a SaaS pro
 produce sites that could never be mistaken for each other or for a car-rental site.
 Dark + metallic accent is reserved for businesses where it earns its place (see the
 luxury-automotive pattern).
+
+## Mandatory video — every site ships real motion
+
+Every generated site MUST include at least one **real video**: an actual `.mp4`/`.webm`
+file stored under `public/assets/video/` (or `public/media/video/`), embedded with an
+HTML `<video>` element, and visible on the final page — as a hero cinematic loop, a
+scroll-driven sequence, a signature video section, or an atmospheric background layer.
+CSS/SVG/canvas/Lottie animation and GIFs do NOT satisfy this unless rendered into a
+real video file. Follow `references/video-direction.md` for the component, specs, and
+generation paths (Replicate when a token exists; procedural ffmpeg otherwise). If no
+real video can be produced, the report must mark the video requirement as FAILED and
+say exactly what was missing — never fake it.
 
 ## Hard rules
 
@@ -111,16 +126,21 @@ Work in this order. Don't reorder motion before layout, or QA before content.
    `prompts-only` if the user wants prompts but has no token yet, `no-api` otherwise
    (deterministic SVG/CSS fallbacks + prompts and a ready-to-run script left behind).
    The user can force a mode by naming it. Never let missing assets block the site.
+   **In every mode, produce the mandatory video now** (see `references/video-direction.md`):
+   with a token, attempt a short curated Replicate video; without one (or on failure),
+   build a procedural video via ffmpeg. Export its poster. Record the outcome honestly.
 7. **Build sections** — all required sections from `references/site-structure.md`, fully
-   responsive, working anchors and CTAs.
+   responsive, working anchors and CTAs. Wire the video(s) in through the reusable
+   `BrandVideo` component (poster, muted+playsInline, reduced-motion path).
 8. **Motion** — GSAP/ScrollTrigger only after the static layout works. Respect
    `prefers-reduced-motion`, simplify on mobile, never permanently hide content behind an
-   animation.
+   animation. Scroll-driven video only after the plain autoplay version works.
 9. **QA** — run typecheck, lint (if configured), and `npm run build`; fix until green. Run
    `bash scripts/secret-scan.sh` from the project root and fix anything it finds. Then walk
-   `references/deployment-checklist.md`, including its **anti-clone pass** — if the site
-   fails that pass, fix the design before reporting; do not ship a lookalike. When
-   everything passes, make the initial git commit so the user gets a clean baseline.
+   `references/deployment-checklist.md`, including its **anti-clone pass** and its
+   **video QA pass** — if the site fails either, fix it before reporting; do not ship a
+   lookalike or a video-less site silently. When everything passes, make the initial git
+   commit so the user gets a clean baseline.
 10. **Localhost** — start the dev server without blocking the session:
     `bash scripts/start-localhost.sh` (finds a free port from 3000, binds 127.0.0.1, writes
     `.local/dev.pid` and `.local/dev.log`, waits until the server responds, prints the URL).
@@ -137,6 +157,11 @@ End with a report containing exactly:
 - sections implemented
 - asset mode used (`no-api` / `prompts-only` / `generate-with-replicate`) and what exists
   where; where asset prompts live if deferred
+- **video status**: path(s) of the video file(s), where each appears on the page, file
+  size, poster/fallback status, and confirmation that autoplay/loop/muted/playsInline
+  are configured; how it was produced (Replicate / procedural / provided) — or, if no
+  real video could be produced, `VIDEO REQUIREMENT: FAILED` with exactly what was
+  missing and the script/prompts left behind to fix it
 - anti-clone pass result (what makes this site specific to this business)
 - env/secrets status: what `.env.example` contains, that no secret is tracked, secret-scan result
 - validation results: typecheck / lint / build, honestly (if something failed, say so)

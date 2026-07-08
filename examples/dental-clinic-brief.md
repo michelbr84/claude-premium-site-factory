@@ -12,6 +12,7 @@ airy, precise. No dark mode, no gold, no drama.
 Services: preventive care, aesthetic dentistry, invisible aligners, implants.
 Signature section idea: the patient journey (arrive → assess → treat → smile) as a
 soft-motion storyline.
+Video idea: a calm light-field drift as the hero's atmospheric layer (procedural is fine).
 Asset mode: no-api.
 ```
 

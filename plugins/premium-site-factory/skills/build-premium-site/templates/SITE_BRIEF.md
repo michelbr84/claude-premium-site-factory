@@ -53,3 +53,14 @@ Everything below was invented or assumed. Replace each item with real data.
 - **Asset prompts / plan:** {{ASSETS_PLAN_LOCATION}}
 - To generate later: add `REPLICATE_API_TOKEN` to `.env.local` (copy `.env.example`,
   never commit it), then `npm run assets:generate`.
+
+## Video (mandatory)
+
+- **Status:** {{VIDEO_STATUS}} (shipped / FAILED — what's missing: {{VIDEO_MISSING}})
+- **Concept:** {{VIDEO_CONCEPT}}
+- **File(s):** {{VIDEO_FILES}} (path, size, duration)
+- **Placement:** {{VIDEO_PLACEMENT}} (hero loop / scroll sequence / signature section /
+  atmospheric layer)
+- **Produced via:** {{VIDEO_METHOD}} (Replicate / procedural ffmpeg / provided)
+- **Poster:** {{VIDEO_POSTER}}
+- To regenerate or upgrade: {{VIDEO_REGEN_INSTRUCTIONS}}

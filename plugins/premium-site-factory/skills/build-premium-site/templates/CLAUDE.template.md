@@ -12,6 +12,9 @@ Tailwind v4 (tokens in `src/app/globals.css` under `@theme`) + GSAP/ScrollTrigge
 - Keep the visual system: don't add new accent colors or font families; reuse the tokens
   and primitives in `globals.css` and `src/components/ui/`.
 - Every animation needs a `prefers-reduced-motion` path and a sane mobile variant.
+- Videos go through `src/components/ui/BrandVideo.tsx` (poster required, muted +
+  playsInline, reduced-motion shows the poster); files live in `public/assets/video/`,
+  hero loops stay ≤ 4MB. The site must always keep at least one real video on the page.
 - Before committing: `npm run build` must pass and `bash scripts/secret-scan.sh` must be clean.
 
 ## Commands

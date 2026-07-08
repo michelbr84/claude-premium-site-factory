@@ -5,13 +5,15 @@ user if they name one. State the chosen mode in `SITE_BRIEF.md` and the final re
 
 | Mode | When | What ships |
 |------|------|-----------|
-| `generate-with-replicate` | `REPLICATE_API_TOKEN` present (in `.env.local` or env) | A **small curated set** (typically 3–5 assets: hero, 1–2 section images, texture, OG image) generated via the script, plus fallbacks kept as safety net |
-| `prompts-only` | No token, but the user plans to generate later (or asks for prompts) | Deterministic fallbacks in active use + finalized prompts in `SITE_BRIEF.md` + ready-to-run `scripts/generate-assets.mjs` |
-| `no-api` | No token, no stated interest in generation | Deterministic SVG/CSS fallbacks designed as the *final* look (not placeholders) + the same script and prompts left behind quietly |
+| `generate-with-replicate` | `REPLICATE_API_TOKEN` present (in `.env.local` or env) | A **small curated set** (typically 3–5 assets: hero, 1–2 section images, texture, OG image) generated via the script, plus fallbacks kept as safety net — **and at least one short generated video** |
+| `prompts-only` | No token, but the user plans to generate later (or asks for prompts) | Deterministic fallbacks in active use + finalized prompts in `SITE_BRIEF.md` + ready-to-run `scripts/generate-assets.mjs` — video comes from the procedural path |
+| `no-api` | No token, no stated interest in generation | Deterministic SVG/CSS fallbacks designed as the *final* look (not placeholders) + the same script and prompts left behind quietly — video comes from the procedural path |
 
 In every mode the site must ship complete and premium — fallbacks are a design choice,
 not a degradation. `no-api` and `prompts-only` differ only in how prominently the
-generation path is documented and reported.
+generation path is documented and reported. **The mandatory video applies in all three
+modes** (see `video-direction.md` and the workflow below): only the production method
+changes — Replicate with a token, procedural ffmpeg without one.
 
 ## Token rules
 
@@ -63,9 +65,40 @@ prompts so the set feels like one shoot.
   known-good defaults, e.g. the latest FLUX family for images); handle failures per-asset
   so one failed generation never kills the run.
 
+## Video-generation workflow (mandatory video)
+
+Every site must ship at least one real video (`video-direction.md` defines what
+counts). Work through this ladder and stop at the first success:
+
+1. **Replicate (token present).** Attempt ONE short curated video (4–8s) whose concept
+   comes from the visual thesis and the industry's video concepts:
+   - Text-to-video or image-to-video (animating the generated hero still keeps the set
+     coherent). Pick a current capable model from Replicate's catalog at build time
+     (search "video" on replicate.com/explore or use a known-good default such as the
+     latest wan/kling/veo-family model available; verify it exists before calling).
+     Video models are slower and pricier than image models — one asset, no variation
+     batches, poll with a generous timeout.
+   - Save to `public/assets/video/` (e.g. `hero-loop.mp4`), re-encode with ffmpeg if
+     needed (H.264, `yuv420p`, `+faststart`, target sizes in `video-direction.md`),
+     export a poster frame.
+   - Extend `scripts/generate-assets.mjs` (or add `scripts/generate-video.mjs`) so the
+     user can regenerate; same token rules — read from env, never print, never commit.
+2. **Replicate failed or no token → procedural.** Build the video locally with the
+   ffmpeg recipes in `video-direction.md` (SVG/frames → video, generative gradients,
+   Ken Burns over stills, waveform motion). This is a designed final asset, not a
+   stopgap. If Replicate failed, say so in the report and note the fallback used.
+3. **Nothing worked** (no token AND no ffmpeg obtainable): ship the site with the
+   poster/static composition in the video's place, leave `scripts/generate-video.mjs`
+   + prompts ready, and mark `VIDEO REQUIREMENT: FAILED` in the final report with the
+   exact missing pieces. Never fake success.
+
+Store videos only under `public/assets/video/` or `public/media/video/`. Posters live
+next to their video or under `public/assets/` with the other imagery.
+
 ## Optimization
 
 - Images: convert to WebP/AVIF (sharp), responsive sizes via `next/image`.
 - Video: MP4 (H.264) + WebM if feasible, target < 4MB hero, always a poster image,
-  `preload="metadata"`, mobile gets the poster or a lighter file.
+  `preload="metadata"`, mobile gets the poster or a lighter file. Full spec in
+  `video-direction.md`.
 - Nothing above ~500KB goes into the page without a stated reason.

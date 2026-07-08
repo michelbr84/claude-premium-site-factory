@@ -12,6 +12,8 @@ details for numbers and metrics. Confident, concrete, zero buzzwords.
 Product pillars: automated reconciliation, close checklist, audit trail, ERP integrations.
 Signature section idea: an annotated close-week timeline that compresses from 10 days
 to 3 as you scroll.
+Video idea: a data-flow mesh (transactions routing into a reconciled ledger) as an
+atmospheric hero layer — procedural waveform/gradient motion is fine.
 Asset mode: no-api — typography and product UI mockups carry the design.
 ```
 

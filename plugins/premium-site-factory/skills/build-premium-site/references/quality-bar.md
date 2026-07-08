@@ -11,6 +11,10 @@ against every line below before reporting success.
   a written visual thesis, industry-appropriate palette/voice/CTA, and a signature
   section this industry earns (no recycled dark/gold, automotive metaphors, or route
   maps by default).
+- Ships at least one real video (`.mp4`/`.webm` on disk, embedded via `<video>`,
+  visible on the page, poster + muted/playsInline/reduced-motion handled) — passes the
+  video QA pass in `deployment-checklist.md`, or the report honestly marks the video
+  requirement as failed.
 - Strong hero: full-screen, cinematic, readable headline, working CTAs.
 - Clear positioning: a visitor understands in 5 seconds what the company does and for whom.
 - Fully responsive: usable and polished at 360px, 768px, 1280px, 1920px.

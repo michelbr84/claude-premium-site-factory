@@ -9,12 +9,17 @@ premium cinematic marketing website from an empty folder in a single pass:
   luxury automotive, real estate) — no house style, no lookalike sites
 - Full landing page: cinematic hero, manifesto, services, signature visual section,
   story/process, showcase, trust layer, final CTA
-- QA: typecheck, build, secret scan, responsive + accessibility checklist, and an
-  anti-clone pass (industry-appropriate palette, copy voice, CTA, signature section)
+- **Mandatory real video** on every site (hero loop, scroll-driven sequence, signature
+  video section, or atmospheric layer) — Replicate-generated with a token, procedural
+  ffmpeg without; poster + muted/playsInline + reduced-motion handled; honest FAILED
+  status in the report if no video could be produced
+- QA: typecheck, build, secret scan, responsive + accessibility checklist, an
+  anti-clone pass (industry-appropriate palette, copy voice, CTA, signature section),
+  and a blocking video QA pass
 - Background localhost dev server with the URL handed to you
 - Three asset modes: `no-api` (designed SVG/CSS visuals), `prompts-only` (fallbacks +
   finalized prompts + ready-to-run script), `generate-with-replicate` (small curated
-  set; token stays in `.env.local`, server/script-side only)
+  set; token stays in `.env.local`, server/script-side only) — video ships in all three
 
 ## Usage
 
@@ -42,7 +47,7 @@ on localhost.
 skills/build-premium-site/
   SKILL.md           # the skill entrypoint and workflow
   references/        # quality bar, site structure, visual direction, industry patterns,
-                     # asset modes, QA checklist (incl. anti-clone pass)
+                     # video direction, asset modes, QA checklist (anti-clone + video passes)
   templates/         # env.example, SITE_BRIEF, README, CLAUDE.md templates for generated sites
   scripts/           # start-localhost.sh, secret-scan.sh (copied into generated sites)
 ```

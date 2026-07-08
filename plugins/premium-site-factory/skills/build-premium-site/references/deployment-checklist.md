@@ -25,6 +25,29 @@ the failing part before shipping — do not rationalize.
 - [ ] Structure test: section order/labels were chosen for this brand, not copied from a
       reference site or a previous run
 
+## Video QA pass (blocking)
+
+The site must ship at least one real video (`video-direction.md`). Verify against the
+BUILT site, not the source you think you wrote. If any check fails and cannot be fixed,
+the final report must say `VIDEO REQUIREMENT: FAILED` with the exact reason — never
+report success without a playing video.
+
+- [ ] At least one `<video>` element exists in the served page
+      (`curl -s <url> | grep -c '<video'` ≥ 1)
+- [ ] The referenced video file exists locally under `public/assets/video/` or
+      `public/media/video/` and is a real video, not an empty placeholder
+      (size > ~100KB AND `ffprobe` reports a video stream with duration > 1s — or, if
+      ffprobe is unavailable, the file plays as the page background and its size is
+      plausible for its duration)
+- [ ] The page/section where the video appears is reachable (curl the URL, confirm the
+      section renders)
+- [ ] Autoplay videos are `muted` and `playsInline` (and muted is ALSO set via
+      ref/effect — React may drop the SSR attribute), `loop` where intended
+- [ ] A poster image exists and is wired up; reduced-motion shows a complete page
+- [ ] Video file size within targets (hero ≤ 4MB; nothing absurd shipped)
+- [ ] No token or secret appears in the video pipeline's source, logs, or generated
+      assets; `.env.local` remains gitignored (secret scan still green after video work)
+
 ## Build & code
 - [ ] `npx tsc --noEmit` clean
 - [ ] `npm run lint` clean (if configured)
@@ -54,7 +77,7 @@ the failing part before shipping — do not rationalize.
 - [ ] Hero media has poster/fallback; page is usable before media loads
 
 ## Performance sanity
-- [ ] Hero media < ~4MB video / < ~500KB image
+- [ ] Hero media ≤ ~4MB video / < ~500KB image
 - [ ] Images through `next/image` with proper `sizes`
 - [ ] Fonts via `next/font` (no layout-shifting font swaps)
 - [ ] No unused heavy dependency shipped to the client

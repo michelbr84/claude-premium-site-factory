@@ -7,6 +7,9 @@ the structure is required, the labels are not.
 ## 1. Cinematic hero
 - Full-screen premium visual: video (muted, autoplay, loop, `playsInline`, poster,
   reduced-motion fallback) or a strong image/generated backdrop with depth.
+- The site's **mandatory real video** (see `video-direction.md`) most naturally lives
+  here as a 4–8s cinematic loop — if not here, it must appear as a scroll-driven
+  sequence, signature video section, or atmospheric layer elsewhere.
 - Strong short headline (positioning, not a slogan collage), one supporting line.
 - Primary CTA + secondary CTA. Fixed or elegant nav with working anchor links.
 
@@ -52,6 +55,8 @@ the structure is required, the labels are not.
 - Footer: contact, social, anchor nav, legal line, copyright with current year.
 
 ## Cross-cutting requirements
+- At least one real video (`video-direction.md`) appears somewhere on the page — hero
+  loop, scroll-driven sequence, signature video section, or atmospheric layer.
 - All nav anchors resolve to section `id`s; smooth-scroll respects reduced motion.
 - Every section works at 360px width. No horizontal overflow anywhere.
 - Contact actions use real links: `https://wa.me/<number>`, `mailto:`, `tel:`.

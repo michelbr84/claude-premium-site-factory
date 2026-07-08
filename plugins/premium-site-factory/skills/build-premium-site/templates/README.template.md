@@ -40,8 +40,16 @@ The site works fully without this — deterministic fallbacks are used instead.
 
 - `src/app/` — App Router pages, layout, global styles (design tokens in `globals.css`)
 - `src/components/sections/` — one component per page section
-- `public/assets/` — `generated/` (Replicate output) and `fallbacks/` (deterministic)
-- `scripts/` — localhost runner, secret scan, asset generation
+- `src/components/ui/BrandVideo.tsx` — the site's video component (poster,
+  reduced-motion, mobile-safe)
+- `public/assets/` — `generated/` (Replicate output), `fallbacks/` (deterministic),
+  `video/` (the site's video asset(s) + posters)
+- `scripts/` — localhost runner, secret scan, asset/video generation
+
+## Video
+
+This site ships a real video (see `SITE_BRIEF.md` → Video for concept, file, placement,
+and how to regenerate or upgrade it).
 
 ## Deploy
 

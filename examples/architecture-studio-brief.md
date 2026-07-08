@@ -13,6 +13,7 @@ quiet grotesque type, captions and indices. Minimal, slow, precise motion.
 Services: residential architecture, interiors, renovation of historic buildings.
 Signature section idea: a floor plan that draws itself, transitioning into the
 finished-space composition.
+Video idea: light moving across a plaster wall through a day, as a slow hero loop.
 Asset mode: prompts-only — I will generate imagery later with my own Replicate token.
 ```
 
