@@ -43,25 +43,33 @@ PID=$!
 echo "$PID" > .local/dev.pid
 
 URL="http://127.0.0.1:$PORT"
-echo "$URL" > .local/dev.url
 
 # Wait for the server to answer (cold start + first compile can take a while).
+# IMPORTANT: dev servers (Next.js et al.) may auto-shift to another port if a
+# race grabbed ours between the check above and bind — so trust the URL the
+# server prints in its own log over our guess. Curling the guessed port could
+# even hit a DIFFERENT project's server and "pass".
 for _ in $(seq 1 90); do
   if ! kill -0 "$PID" 2>/dev/null; then
     echo "Dev server exited early. Last log lines:" >&2
     tail -n 25 .local/dev.log >&2
     exit 1
   fi
+  LOG_URL=$(grep -oE 'https?://(127\.0\.0\.1|localhost):[0-9]+' .local/dev.log 2>/dev/null | head -n1 || true)
+  if [ -n "$LOG_URL" ]; then
+    URL=$(printf '%s' "$LOG_URL" | sed 's|localhost|127.0.0.1|')
+  fi
   if command -v curl >/dev/null 2>&1; then
-    if curl -s -o /dev/null "$URL"; then
+    if [ -n "$LOG_URL" ] && curl -s -o /dev/null "$URL"; then
       break
     fi
-  else
-    break # no curl available; assume it will come up
+  elif [ -n "$LOG_URL" ]; then
+    break # no curl available; trust the server's own log line
   fi
   sleep 1
 done
 
+echo "$URL" > .local/dev.url
 echo "$URL"
 echo "PID: $PID"
 echo "Log: .local/dev.log"

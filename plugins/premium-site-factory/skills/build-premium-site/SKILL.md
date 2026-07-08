@@ -159,7 +159,9 @@ Work in this order. Don't reorder motion before layout, or QA before content.
 10. **Localhost** — start the dev server without blocking the session:
     `bash scripts/start-localhost.sh` (finds a free port from 3000, binds 127.0.0.1, writes
     `.local/dev.pid` and `.local/dev.log`, waits until the server responds, prints the URL).
-    Verify the URL actually returns HTML (`curl -s`) before reporting it.
+    Verify the URL actually returns THIS site's HTML (`curl -s` + check the `<title>` or a
+    brand string) before reporting it — dev servers can silently shift port if a race took
+    the requested one, and curling the wrong port may hit another project's server.
 11. **Final report** — see below.
 
 ## Final report
